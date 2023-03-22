@@ -1,14 +1,14 @@
 import { useContext } from 'react';
 import * as C from './AppStyles'
 import { Header } from './components/Header';
-import { Context } from './contexts/Context';
+import { useAppSelector } from './redux/hooks/useAppSelector';
 import { MainRoutes } from './routes/mainRoutes';
 
 const App = () => {
-  const { state, dispatch } = useContext(Context)
+  const theme = useAppSelector(state => state.theme)
 
   return (
-    <C.Container theme={state.theme.status}>
+    <C.Container theme={theme.status}>
       <Header />
 
       <MainRoutes />

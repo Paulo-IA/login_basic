@@ -1,14 +1,13 @@
 import * as C from './styles'
 import { ButtonTheme } from '../ButtonTheme'
-import { useContext } from 'react'
-import { Context } from '../../contexts/Context'
+import { useAppSelector } from '../../redux/hooks/useAppSelector'
 
 export const Header = () => {
-    const { state, dispatch } = useContext(Context)
+    const theme = useAppSelector(state => state.theme)
 
     return (
-        <C.Container theme={state.theme.status}>
-            <C.Landmark theme={state.theme.status}>BasicLogin</C.Landmark>
+        <C.Container theme={theme.status}>
+            <C.Landmark theme={theme.status}>BasicLogin</C.Landmark>
             <ButtonTheme />
         </C.Container>
     )

@@ -1,38 +1,27 @@
-import { useContext } from 'react'
-import { Context } from '../../contexts/Context'
-
+import { useAppSelector } from '../../redux/hooks/useAppSelector'
 
 import * as C from './styles'
 import SunPng from '../../assets/sun.png'
 import MoonPng from '../../assets/moon.png'
+import { useDispatch } from 'react-redux'
+import { setThemeStatus } from '../../redux/reducers/themeReducer'
 
 export const ButtonTheme = () => {
-    const { state, dispatch } = useContext(Context)
+    const dispatch = useDispatch()
+    const theme = useAppSelector(state => state.theme)
+
+    const switchTheme = (newTheme: string) => dispatch( setThemeStatus(newTheme) )
 
     const handleChangeTheme = () => {
-        if (state.theme.status === 'light') {
-            dispatch({
-                type: "CHANGE_THEME",
-                payload: {
-                    status: "dark"
-                }
-            })
-        } else {
-            dispatch({
-                type: "CHANGE_THEME",
-                payload: {
-                    status: "light"
-                }
-            })
-        }
+        switchTheme(theme.status === 'light' ? 'dark' : 'light')
     }
 
     return (
         <C.ButtonChangeTheme onClick={handleChangeTheme}>
-            {state.theme.status === 'light' &&
+            {theme.status === 'light' &&
                 <C.ThemeIcon src={SunPng} />
             }
-            {state.theme.status !== 'light' &&
+            {theme.status !== 'light' &&
                 <C.ThemeIcon src={MoonPng} />
             }
         </C.ButtonChangeTheme>

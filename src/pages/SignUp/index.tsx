@@ -1,67 +1,74 @@
 import * as C from './styles'
+import { useDispatch } from 'react-redux'
+import { setName, setEmail, setPassword } from '../../redux/reducers/userReducer'
 import { Link, useNavigate } from 'react-router-dom'
-import { useContext, useState } from 'react'
-import { Context } from '../../contexts/Context'
+import { useState } from 'react'
 import SignUpSvg from '../../assets/signup.svg'
 import { Button } from '../../components/Button'
+import { useAppSelector } from '../../redux/hooks/useAppSelector'
 
 export const SignUp = () => {
-    const { state, dispatch } = useContext(Context)
     const navigate = useNavigate()
-    const [name, setName] = useState('')
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const dispatch = useDispatch();
+
+    const user = useAppSelector(state => state.user)
+    const theme = useAppSelector(state => state.theme)
+
+    const [nameInput, setNameInput] = useState('')
+    const [emailInput, setEmailInput] = useState('')
+    const [passwordInput, setPasswordInput] = useState('')
+
+    const changeName = (newName: string) => dispatch( setName(newName) )
+    const changeEmail = (newEmail: string) => dispatch( setEmail(newEmail) )
+    const changePassword = (newPassword: string) => dispatch( setPassword(newPassword) )
 
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setName(e.target.value)
+        setNameInput(e.target.value)
     }
     
     const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setEmail(e.target.value)
+        setEmailInput(e.target.value)
     }
     
     const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setPassword(e.target.value)
+        setPasswordInput(e.target.value)
     }
 
     const handleSignUpUser = () => {
-        if (!name || !email || !password) {
+        if (!nameInput || !emailInput || !passwordInput) {
             return alert("Preencha todos os campos")
         }
 
-        dispatch({
-            type: "STORE_INFOS",
-            payload: {
-                name, email, password
-            }
-        })
+        changeName(nameInput)
+        changeEmail(emailInput)
+        changePassword(passwordInput)
         navigate('/')
     }
 
     return (
-        <C.Container theme={state.theme.status}>
-            <C.SigInContainer theme={state.theme.status}>
+        <C.Container theme={theme.status}>
+            <C.SigInContainer theme={theme.status}>
                 <C.SignUpTitle>CADASTRO</C.SignUpTitle>
                 <C.FormSignUp>
                     <C.Label>Nome</C.Label>
                     <C.Input 
                         type='text'
                         placeholder='Nome'
-                        value={name}
+                        value={nameInput}
                         onChange={handleNameChange}
                     />
                     <C.Label>E-MAIL</C.Label>
                     <C.Input 
                         type='email'
                         placeholder='E-mail'
-                        value={email}
+                        value={emailInput}
                         onChange={handleEmailChange}
                     />
                     <C.Label>SENHA</C.Label>
                     <C.Input 
                         type='password'
                         placeholder='Senha'
-                        value={password}
+                        value={passwordInput}
                         onChange={handlePasswordChange}
                     />
                     <Button message='CADASTRE-SE' clickFn={handleSignUpUser} />
